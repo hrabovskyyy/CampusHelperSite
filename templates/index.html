@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Helper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_styles.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Campus Helper</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="usernameInput" placeholder="Ваше ім'я користувача" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" placeholder="Ваш пароль" required>
+            </div>
+            <button type="submit" id="loginButton">Увійти</button>
+            <p class="register-link">Не маєте акаунту? <a href="#" id="showRegisterForm">Зареєструйтесь</a></p>
+        </form>
+
+        <form id="registerForm" style="display: none;">
+        <div class="input-group">
+            <input type="text" id="newFullNameInput" placeholder="Ваше ПІБ" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="newGroupInput" placeholder="Ваша група" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="newUsernameInput" placeholder="Ваше ім'я користувача" required>
+        </div>
+        <div class="input-group">
+            <input type="password" id="newPasswordInput" placeholder="Ваш пароль" required>
+        </div>
+        <button type="submit" id="registerButton">Зареєструватись</button>
+        <p class="register-link">Вже маєте акаунт? <a href="#" id="showLoginForm">Увійти</a></p>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Використовуємо window.location для переходу на сторінку чату
+                    window.location.href = '/chat';
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const newFullName = document.getElementById('newFullNameInput').value;
+    const newGroup = document.getElementById('newGroupInput').value;
+    const newUsername = document.getElementById('newUsernameInput').value;
+    const newPassword = document.getElementById('newPasswordInput').value;
+
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            full_name: newFullName,  // Ensure this is included
+            group: newGroup,          // Ensure this is included
+            username: newUsername,
+            password: newPassword
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Реєстрація успішна! Тепер ви можете увійти.');
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        } else {
+            alert(data.message);
+        }
+    });
+});
+
+        document.getElementById('showRegisterForm').addEventListener('click', function() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        });
+
+        document.getElementById('showLoginForm').addEventListener('click', function() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+    </script>

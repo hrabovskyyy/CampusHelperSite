@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Helper - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat_styles.css') }}">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="chat-container">
+            <div class="header">
+                <img src="{{ url_for('static', filename='Campus.jpg') }}" alt="Campus Helper" class="avatar">
+                <h1>Campus Helper</h1>
+            </div>
+            <div class="messages" id="messages">
+                {% for msg in messages %}
+                    <div class="message {% if msg.sender == 'user' %}sent{% else %}received{% endif %}">
+                        {% if msg.timestamp.date() == now.date() %}
+                            <span>{{ msg.message }} (Today)</span>
+                        {% else %}
+                            <span>{{ msg.message }} ({{ msg.timestamp.date() }})</span>
+                        {% endif %}
+                        {% if msg.buttons %}
+                            <div class="buttons">
+                                {% for button in json.loads(msg.buttons) %}
+                                    <button class="option-button" data-action="{{ button.action }}">{{ button.label }}</button>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <span class="timestamp">{{ msg.timestamp.strftime('%H:%M') }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Напишіть повідомлення...">
+                <button id="sendButton">Відправити</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle button clicks
+            document.querySelectorAll('.option-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = button.dataset.action;
+                    fetch('/button_click', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ action: action })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const messagesDiv = document.getElementById('messages');
+                        const newMessage = document.createElement('div');
+                        newMessage.className = 'message sent';
+                        newMessage.innerHTML = data.response + ' <span class="timestamp">' + new Date().toLocaleString() + '</span>';
+                        messagesDiv.appendChild(newMessage);
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to the bottom
+                    });
+                });
+            });
+
+            // Handle sending messages
+            document.getElementById('sendButton').addEventListener('click', function() {
+                const messageInput = document.getElementById('messageInput');
+                const userMessage = messageInput.value;
+
+                if (userMessage) {
+                    fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const messagesDiv = document.getElementById('messages');
+                        const newMessage = document.createElement('div');
+                        newMessage.className = 'message sent';
+                        newMessage.innerHTML = userMessage + ' <span class="timestamp">' + new Date().toLocaleString() + '</span>';
+                        messagesDiv.appendChild(newMessage);
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to the bottom
+ messageInput.value = ''; // Clear input
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

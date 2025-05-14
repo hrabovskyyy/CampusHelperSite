@@ -1,0 +1,189 @@
+/* chat_styles.css */
+
+/* Загальні стилі */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #EAEAEA;
+    margin: 0;
+    padding: 0;
+}
+
+/* Панель зверху */
+.top-panel {
+    background-color: #0088CC;
+    color: white;
+    padding: 10px;
+    position: relative;
+}
+
+/* Контейнер для чату */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Висота вікна */
+}
+
+.chat-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Фіксована ширина */
+    height: 600px; /* Фіксована висота */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Заголовок чату */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #EAEAEA;
+}
+
+.header img.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.header h1 {
+    font-size: 20px;
+    margin: 0;
+}
+
+/* Вікно повідомлень */
+.messages {
+    flex: 1; /* Залишає простір для вхідного поля */
+    padding: 10px;
+    overflow-y: auto; /* Дозволяє прокручування */
+    max-height: calc(100% - 80px); /* Висота вікна з урахуванням заголовка та вводу */
+}
+
+/* Стилі для повідомлень */
+.message {
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 80%;
+}
+
+.message.sent {
+    background-color: #0088CC;
+    color: white;
+    align-self: flex-end;
+}
+
+.message.received {
+    background-color: #EAEAEA;
+    color: black;
+    align-self: flex-start;
+}
+
+/* Введення повідомлень */
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #EAEAEA;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #EAEAEA;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.input-area button {
+    background-color: #0088CC;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.input-area button:hover {
+    background-color: #0077B3;
+}
+
+/* Кнопки в повідомленнях */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.option-button {
+    background-color: #0088CC;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.option-button:hover {
+    background-color: #0077B3;
+}
+
+/* Стилі для випадаючого меню */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    background-color: #0088CC;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.dropdown-content {
+    display: none; /* Сховати за замовчуванням */
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.dropdown-content .logout-button {
+    width: 100%; /* Заповнити ширину випадаючого меню */
+    border: none;
+    background: none;
+    text-align: left; /* Вирівняти текст зліва */
+    padding: 12px 16px;
+    cursor: pointer;
+}
+
+.dropdown-content .logout-button:hover {
+    background-color: #f1f1f1; /* Ефект при наведенні */
+    border-radius: 12px; /* Змінюємо скруглення при наведенні */
+}
+
+/* Показати меню при наведенні */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.timestamp {
+    font-size: 0.8em; /* Зменшуємо шрифт для відмітки часу */
+    color: firebrick; /* Змінюємо колір тексту для відмітки часу на білий */
+    text-align: right; /* Вирівнюємо текст зліва */
+    display: block; /* Відображаємо як блок, щоб зайняти всю ширину */
+}
+.bot-response {
+    font-size: 0.8em; /* Зменшуємо шрифт для відповіді бота */
+    color: #555; /* Змінюємо колір тексту для відповіді бота */
+}
